@@ -25,5 +25,15 @@ server.get('/projects', (req, res) => {
     return res.json(projects)
 })
 
+server.post('/projects', (req, res) => {
+    const { id, title, tasks} = req.body
+
+    const project = { id, title, tasks}
+
+    projects.push(project)
+
+    return res.json(projects)
+})
+
 server.listen(3000)
 
