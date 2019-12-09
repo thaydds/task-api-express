@@ -70,5 +70,26 @@ server.put('/projects/:id', projectAlreadyExists, (req, res) => {
 
 })
 
+server.delete('/projects/:id', projectAlreadyExists, (req, res) => {
+    const { id } = req.params;
+  
+    const projectIndex = projects.findIndex(p => p.id == id);
+  
+    projects.splice(projectIndex, 1);
+  
+    return res.json(projects)
+});
+
+server.post('/projects/:id/tasks', projectAlreadyExists, (req, res) => {
+    const { id } = req.params
+    const { title } = req.body
+
+    const project = projects.find( p => p.id == id)
+
+    project.tasks.push(title)
+
+    return res.json(projects)
+})
+
 server.listen(3000)
 
