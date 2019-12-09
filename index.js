@@ -17,6 +17,26 @@ const projects = [
     }
 ]
 
+let reqNumber = 0
+
+function projectAlreadyExists( req, res, next) {
+    if(!projects[req.params.index]){
+        return res.status(400).json({ error: 'Project does not exists'})
+    }
+
+    return next()
+}
+
+server.use( (req, res, next) => {
+    console.log('Request')
+    console.log(`Method: ${req.method}, URL: ${req.url}`)
+    reqNumber++
+
+    console.log(`ReqNumber: ${reqNumber}`)
+
+    next()
+})
+
 server.get('/', (req, res) => {
     return res.send('Welcome to task API')
 })
