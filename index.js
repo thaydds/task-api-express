@@ -20,7 +20,10 @@ const projects = [
 let reqNumber = 0
 
 function projectAlreadyExists( req, res, next) {
-    if(!projects[req.params.index]){
+    const { id } = req.params
+    const project = projects.find( p => p.id == id)
+
+    if(!project){
         return res.status(400).json({ error: 'Project does not exists'})
     }
 
@@ -53,6 +56,18 @@ server.post('/projects', (req, res) => {
     projects.push(project)
 
     return res.json(projects)
+})
+
+server.put('/projects/:id', projectAlreadyExists, (req, res) => {
+    const { id } = req.params
+    const { title } = req.body
+
+    const project = projects.find( p => p.id == id)
+
+    project.title = title
+
+    return res.json(projects)
+
 })
 
 server.listen(3000)
