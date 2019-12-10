@@ -13,9 +13,10 @@ const projects = [
     {
         id: 2,
         title: 'second project',
-        tasks:[]
+        tasks:['i dont know', 'study']
     }
 ]
+
 
 let reqNumber = 0
 
@@ -34,9 +35,10 @@ server.use( (req, res, next) => {
     console.log('Request')
     console.log(`Method: ${req.method}, URL: ${req.url}`)
     reqNumber++
-
     console.log(`ReqNumber: ${reqNumber}`)
-
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
     next()
 })
 
@@ -70,26 +72,26 @@ server.put('/projects/:id', projectAlreadyExists, (req, res) => {
 
 })
 
+server.put('/projects/:id/task', projectAlreadyExists, (req, res) => {
+    const { id } = req.params
+    const { task } = req.body
+
+    const project = projects.find( p => p.id == id)
+
+    project.tasks.push(task)
+
+    return res.json(projects)
+})
+
 server.delete('/projects/:id', projectAlreadyExists, (req, res) => {
     const { id } = req.params;
-  
     const projectIndex = projects.findIndex(p => p.id == id);
-  
+
     projects.splice(projectIndex, 1);
   
     return res.json(projects)
 });
 
-server.post('/projects/:id/tasks', projectAlreadyExists, (req, res) => {
-    const { id } = req.params
-    const { title } = req.body
-
-    const project = projects.find( p => p.id == id)
-
-    project.tasks.push(title)
-
-    return res.json(projects)
-})
 
 server.listen(3000)
 
